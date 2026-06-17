@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scrylab"
+version = "0.1.0"
+description = "Python client for the ScryLab GUI – send signals into a live ScryLab session from scripts, notebooks or simulation pipelines"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [
+    { name = "ScryLab", email = "support@scrylab.de" },
+]
+keywords = ["scrylab", "signal", "measurement", "visualization", "time-series", "plot"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "requests>=2.28",
+    "numpy>=1.24",
+]
+
+[project.urls]
+Repository = "https://github.com/scrylab/scrylab-python"
+Issues = "https://github.com/scrylab/scrylab-python/issues"
+
+[project.optional-dependencies]
+pandas = ["pandas>=1.5"]
+dev = ["pytest>=7", "pandas>=1.5"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/scrylab"]
