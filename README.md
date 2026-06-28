@@ -1,6 +1,6 @@
 # scrylab-python
 
-Python wrapper for the [ScryLab](https://scrylab.de) REST API. Lets you send signals directly into a running ScryLab GUI from any Python environment – scripts, Jupyter notebooks or simulation pipelines – as a faster, more interactive alternative to matplotlib or plotly for exploratory signal analysis.
+Python wrapper for the [ScryLab](https://scrylab.de) REST API. Lets you plot signals directly in a running ScryLab GUI from any Python environment – scripts, Jupyter notebooks or simulation pipelines – as a faster, more interactive alternative to matplotlib or plotly for exploratory signal analysis.
 
 ## What you can do
 

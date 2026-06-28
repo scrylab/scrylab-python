@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "scrylab"
 version = "0.1.0"
-description = "Python client for the ScryLab GUI – send signals into a live ScryLab session from scripts, notebooks or simulation pipelines"
+description = "Python wrapper for the ScryLab GUI – plot signals in a live ScryLab session from scripts, notebooks or simulation pipelines"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
