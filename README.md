@@ -131,3 +131,10 @@ Sxx_db = 10 * np.log10(Sxx + 1e-12)
 spec = pd.DataFrame(Sxx_db, index=f, columns=t_bins)
 scry.send(y=f, z=spec, name="Spectrogram", y_unit="Hz", x_unit="s", z_unit="dB")
 ```
+
+## Running tests
+
+```bash
+pip install -e ".[dev]"
+pytest
+```
