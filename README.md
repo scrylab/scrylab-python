@@ -1,5 +1,9 @@
 # scrylab-python
 
+[![PyPI](https://img.shields.io/pypi/v/scrylab)](https://pypi.org/project/scrylab/)
+![Python versions](https://img.shields.io/pypi/pyversions/scrylab)
+![License](https://img.shields.io/github/license/scrylab/scrylab-python)
+
 Python wrapper for the [ScryLab](https://scrylab.de) REST API. Lets you plot signals directly in a running ScryLab GUI from any Python environment – scripts, Jupyter notebooks or simulation pipelines – as a faster, more interactive alternative to matplotlib or plotly for exploratory signal analysis.
 
 ## What you can do
