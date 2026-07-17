@@ -9,7 +9,7 @@ Python wrapper for the [ScryLab](https://scrylab.de) REST API. Lets you plot sig
 ## What you can do
 
 - Send 1D signals (time series, measurement channels, …) into ScryLab's data browser
-- Send ~~colored lines (signal + scalar color axis)~~ (coming soon) or spectrograms (2D matrix)
+- Send colored lines (signal + scalar color axis) or spectrograms (2D matrix)
 - Convenience function: open signals directly in a plot from code
 
 ## Installation
