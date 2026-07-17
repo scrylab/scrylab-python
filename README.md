@@ -75,7 +75,7 @@ scry.send_many(
 | `names` | list of signal names; auto-generated if omitted |
 | `source` | [data source](https://docs.scrylab.de/docs/concepts/data-sources/) to send into, default `"Sent from API"`; created automatically if it doesn't exist yet |
 | `x` | a single numpy array/list broadcast to all signals, or a list of numpy arrays/lists (one per signal) |
-| `z` | ~~1D array (colored trace)~~ (coming soon) or 2D array/`pandas.DataFrame` (spectrogram) – broadcast a single value to all signals, or pass a list (one per signal) |
+| `z` | 1D array (colored trace) or 2D array/`pandas.DataFrame` (spectrogram) – broadcast a single value to all signals, or pass a list (one per signal) |
 | `y_unit`, `x_unit`, `z_unit` | a single string applied to all signals, or a list of strings (one per signal) |
 | `overwrite` | replace existing signals with the same name; raises `ScryLabError` if `False` (default) and a signal with that name already exists |
 
