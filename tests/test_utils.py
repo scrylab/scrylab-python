@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from scrylab._utils import normalize_one, normalize_many
+from scrylab._utils import normalize_one, normalize_many, _coerce_x_datetime
 
 # --- normalize_one ---
 
@@ -69,3 +69,27 @@ def test_normalize_many_list_of_series():
     assert names == ["Temp", "Pressure"]
     np.testing.assert_array_equal(xs[0], s1.index.to_numpy())
     np.testing.assert_array_equal(xs[1], s2.index.to_numpy())
+
+# --- coerce_datetime ---
+
+def test_coerce_datetime_x_to_seconds_and_epoch():
+    idx = pd.date_range("2026-01-01", periods=3, freq="s").to_numpy()
+    x, epoch = _coerce_x_datetime(idx)
+    assert list(x) == [0.0, 1.0, 2.0]
+    assert epoch == pd.Timestamp("2026-01-01", tz="UTC").timestamp()
+
+
+def test_coerce_numeric_x_passthrough():
+    x = np.array([0.0, 1.0, 2.0])
+    xout, epoch = _coerce_x_datetime(x)
+    assert xout is x and epoch is None
+
+
+def test_coerce_none_x():
+    assert _coerce_x_datetime(None) == (None, None)
+
+
+def test_coerce_empty_datetime_untouched():
+    empty = np.array([], dtype="datetime64[ns]")
+    xout, epoch = _coerce_x_datetime(empty)
+    assert xout is empty and epoch is None

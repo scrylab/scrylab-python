@@ -6,6 +6,17 @@ def _broadcast(val, n):
     return list(val) if isinstance(val, (list, tuple)) else [val] * n
 
 
+def _coerce_x_datetime(x):
+    if x is None:
+        return None, None
+    arr = np.asarray(x)
+    if arr.size and np.issubdtype(arr.dtype, np.datetime64):
+        t = arr.astype("datetime64[ns]").astype("int64")
+        first = int(t[0])
+        return (t - first) / 1e9, first / 1e9
+    return x, None
+
+
 def normalize_one(y, name: Optional[str], x, z):
     try:
         import pandas as pd

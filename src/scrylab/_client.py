@@ -4,8 +4,10 @@ from typing import Optional
 
 import requests
 
+from ._utils import _coerce_x_datetime
 
-_MIN_APP_VERSION = "0.1.10"
+
+_MIN_APP_VERSION = "0.2.9"
 
 
 def _parse_version(v: str) -> tuple:
@@ -93,6 +95,7 @@ class _Client:
         y_units, x_units, z_units = _norm(y_units), _norm(x_units), _norm(z_units)
         files, metas = [], []
         for yi, ni, xi, zi, yu, xu, zu in zip(ys, names, xs, zs, y_units, x_units, z_units):
+            xi, xe = _coerce_x_datetime(xi)
             buf = io.BytesIO()
             arrays = {"y": np.asarray(yi)}
             if xi is not None: arrays["x"] = np.asarray(xi)
@@ -104,6 +107,7 @@ class _Client:
             if yu is not None: m["y_unit"] = yu
             if xu is not None: m["x_unit"] = xu
             if zu is not None: m["z_unit"] = zu
+            if xe is not None: m["x_epoch"] = xe
             if overwrite: m["overwrite"] = True
             metas.append(m)
 

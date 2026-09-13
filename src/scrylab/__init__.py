@@ -27,7 +27,8 @@ def send(
 
     y accepts a numpy array, a plain list, or a pandas Series.
     For a Series, x defaults to the index and name to the series name.
-    x accepts a numpy array, list, or pandas Series/Index.
+    x accepts a numpy array, list, or pandas Series/Index. A datetime x
+    (pandas DatetimeIndex / numpy datetime64) yields a calendar (date) axis.
     z is optional – pass a 1D array/list/Series for a color axis or a 2D array/DataFrame for a spectrogram.
     source is created automatically if it doesn't exist yet.
     Raises ScryLabError on failure or if the name already exists (overwrite=False).
@@ -61,6 +62,7 @@ def send_many(
       - a pandas DataFrame: each column is one signal, index as x
 
     x and z can each be a list (one entry per signal) or a single value broadcast to all.
+    A datetime x (pandas DatetimeIndex / numpy datetime64) yields a calendar (date) axis.
     z accepts a 1D array (color axis) or 2D matrix (spectrogram) per signal.
     y_unit, x_unit, z_unit each accept a single string (applied to all signals) or a list
     (one unit per signal).
@@ -89,7 +91,8 @@ def plot(
 ) -> None:
     """Send a single signal to ScryLab and plot a signal-instance.
 
-    Accepts the same y, x, z types as send(). Always lands in data source "Sent from API".
+    Accepts the same y, x, z types as send() (incl. a datetime x for a date axis).
+    Always lands in data source "Sent from API".
     A new plot is created if none exists.
     """
     try:
