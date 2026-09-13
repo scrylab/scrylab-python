@@ -96,7 +96,7 @@ class _Client:
 
         y_units, x_units, z_units = _norm(y_units), _norm(x_units), _norm(z_units)
         x_domains, master_domains = _norm(x_domains), _norm(master_domains)
-        masters = list(masters) if masters is not None else [None] * n
+        masters = list(masters) if isinstance(masters, (list, tuple)) else [masters] * n
         files, metas = [], []
         for (yi, ni, xi, zi, yu, xu, zu, xd, mi, md) in zip(
                 ys, names, xs, zs, y_units, x_units, z_units,

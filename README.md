@@ -51,7 +51,7 @@ scry.send(y, name="Speed", source="Testrun 01", x=t, y_unit="km/h", x_unit="s")
 | `y` | numpy array, list, or `pandas.Series`; for a Series, `name` and `x` default to the series' name and index |
 | `name` | signal name (auto-generated if omitted) |
 | `source` | [data source](https://docs.scrylab.de/docs/concepts/data-sources/) to send into, default `"Sent from API"`; created automatically if it doesn't exist yet |
-| `x` | numpy array, list, or `pandas.Series`/`Index`; auto-generated if omitted |
+| `x` | numpy array, list, or `pandas.Series`/`Index`; auto-generated if omitted. A datetime x (`DatetimeIndex` / `datetime64`) yields a calendar axis |
 | `z` | optional color axis – 1D array/list/`pandas.Series` (one value per sample, colors the trace) or 2D array/`pandas.DataFrame` (matrix → spectrogram; columns map to x-axis, index to y-axis) |
 | `y_unit`, `x_unit`, `z_unit` | axis units, e.g. `"V"`, `"s"`, `"Hz"` |
 | `x_domain` | what the x-axis measures: `"time"`, `"frequency"`, `"parametric"` (x is another measured channel) or a custom quantity like `"distance"` – declared domains use SI base scales by convention (s / Hz / m); without it the signal plots but stays out of cursor sync |
@@ -77,10 +77,12 @@ scry.send_many(
 | `y` | list of numpy arrays/lists/`pandas.Series`, or `pandas.DataFrame` (each column becomes one signal); Series names and indices are used automatically |
 | `names` | list of signal names; auto-generated if omitted |
 | `source` | [data source](https://docs.scrylab.de/docs/concepts/data-sources/) to send into, default `"Sent from API"`; created automatically if it doesn't exist yet |
-| `x` | a single numpy array/list broadcast to all signals, or a list of numpy arrays/lists (one per signal) |
+| `x` | a single numpy array/list broadcast to all signals, or a list of numpy arrays/lists (one per signal). A datetime x (`DatetimeIndex` / `datetime64`) yields a calendar axis |
 | `z` | 1D array (colored trace) or 2D array/`pandas.DataFrame` (spectrogram) – broadcast a single value to all signals, or pass a list (one per signal) |
 | `y_unit`, `x_unit`, `z_unit` | a single string applied to all signals, or a list of strings (one per signal) |
-| `x_domain` | x quantity (`"time"`/`"frequency"`/…), single string or a list (one per signal) – see `send()`. For parametric XY signals with a master axis use `send()` per signal |
+| `x_domain` | x quantity (`"time"`/`"frequency"`/…), single string or a list (one per signal) – see `send()` |
+| `master` | master axis for parametric XY curves – a list (one per signal) or a single array broadcast to all; see `send()` |
+| `master_domain` | single string applied to all signals, or a list (one per signal) – see `send()` |
 | `overwrite` | replace existing signals with the same name; raises `ScryLabError` if `False` (default) and a signal with that name already exists |
 
 ### `scry.plot(y, …)`

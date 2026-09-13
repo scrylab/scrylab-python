@@ -67,6 +67,8 @@ def send_many(
     z_unit: Union[str, list, None] = None,
     overwrite: bool = False,
     x_domain: Union[str, list, None] = None,
+    master=None,
+    master_domain: Union[str, list, None] = None,
 ) -> None:
     """Send multiple signals to ScryLab without plotting.
 
@@ -80,8 +82,9 @@ def send_many(
     y_unit, x_unit, z_unit each accept a single string (applied to all signals) or a list
     (one unit per signal).
     x_domain declares the x quantity ("time", "frequency", …), single string
-    or one per signal – see send(). For parametric XY signals with a master
-    axis use send() per signal.
+    or one per signal – see send().
+    master and master_domain work as in send(); master accepts a list
+    (one per signal) or a single array broadcast to all.
     Raises ScryLabError on failure.
     """
     try:
@@ -89,7 +92,8 @@ def send_many(
         client    = _default_client
         source_id = client._resolve_source(source)
         client.send(ys, ns, source_id, xs, zs, y_unit, x_unit, z_unit,
-                    overwrite=overwrite, x_domains=x_domain)
+                    overwrite=overwrite, x_domains=x_domain, masters=master,
+                    master_domains=master_domain)
     except ScryLabError as e:
         raise ScryLabError(str(e)) from None
     except Exception as e:
