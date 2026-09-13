@@ -17,6 +17,8 @@ Python wrapper for the [ScryLab](https://scrylab.de) REST API. Lets you plot sig
 1. Prerequisite: the ScryLab GUI (desktop app) needs to be running on the same machine. [Installation Guide](https://docs.scrylab.de/docs/getting-started/installation/) 
 2. Install the wrapper: `pip install scrylab`
 
+No PyPI access? Download the wheel from [Releases](https://github.com/scrylab/scrylab-python/releases) and install it with `pip install scrylab-<version>-py3-none-any.whl`.
+
 ## Quick start
 
 ```python
