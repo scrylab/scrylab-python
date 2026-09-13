@@ -54,6 +54,9 @@ scry.send(y, name="Speed", source="Testrun 01", x=t, y_unit="km/h", x_unit="s")
 | `x` | numpy array, list, or `pandas.Series`/`Index`; auto-generated if omitted |
 | `z` | optional color axis – 1D array/list/`pandas.Series` (one value per sample, colors the trace) or 2D array/`pandas.DataFrame` (matrix → spectrogram; columns map to x-axis, index to y-axis) |
 | `y_unit`, `x_unit`, `z_unit` | axis units, e.g. `"V"`, `"s"`, `"Hz"` |
+| `x_domain` | what the x-axis measures: `"time"`, `"frequency"`, `"parametric"` (x is another measured channel) or a custom quantity like `"distance"` – declared domains use SI base scales by convention (s / Hz / m); without it the signal plots but stays out of cursor sync |
+| `master` | master axis of an XY/scatter curve: one value per sample (same length as `y`), e.g. the timestamp of each (x, y) point – enables draggable trajectory markers and cursor sync; implies `x_domain="parametric"`. A datetime master anchors the curve in absolute time |
+| `master_domain` | what the master measures: `"time"` (default), `"frequency"`, `"distance"`, … |
 | `overwrite` | replace an existing signal with the same name; raises `ScryLabError` if `False` (default) and a signal with that name already exists |
 
 ### `scry.send_many(y, …)`
@@ -77,6 +80,7 @@ scry.send_many(
 | `x` | a single numpy array/list broadcast to all signals, or a list of numpy arrays/lists (one per signal) |
 | `z` | 1D array (colored trace) or 2D array/`pandas.DataFrame` (spectrogram) – broadcast a single value to all signals, or pass a list (one per signal) |
 | `y_unit`, `x_unit`, `z_unit` | a single string applied to all signals, or a list of strings (one per signal) |
+| `x_domain` | x quantity (`"time"`/`"frequency"`/…), single string or a list (one per signal) – see `send()`. For parametric XY signals with a master axis use `send()` per signal |
 | `overwrite` | replace existing signals with the same name; raises `ScryLabError` if `False` (default) and a signal with that name already exists |
 
 ### `scry.plot(y, …)`

@@ -22,6 +22,9 @@ def send(
     x_unit: Optional[str] = None,
     z_unit: Optional[str] = None,
     overwrite: bool = False,
+    x_domain: Optional[str] = None,
+    master=None,
+    master_domain: Optional[str] = None,
 ) -> None:
     """Send a single signal to ScryLab without plotting.
 
@@ -31,13 +34,22 @@ def send(
     (pandas DatetimeIndex / numpy datetime64) yields a calendar (date) axis.
     z is optional – pass a 1D array/list/Series for a color axis or a 2D array/DataFrame for a spectrogram.
     source is created automatically if it doesn't exist yet.
+    x_domain declares the x quantity ("time", "frequency", …; declared
+    domains use SI base scales by convention: s / Hz / m) – without it
+    the signal plots fine but stays out of cursor sync.
+    master makes an XY/scatter curve cursor-syncable: one value per sample
+    (same length as y), e.g. the timestamp of each (x, y) point; implies
+    x_domain="parametric". A datetime master anchors the curve in absolute
+    time. master_domain declares the master quantity (default "time").
     Raises ScryLabError on failure or if the name already exists (overwrite=False).
     """
     try:
         yi, ni, xi, zi = normalize_one(y, name, x, z)
         client    = _default_client
         source_id = client._resolve_source(source)
-        client.send_one(yi, ni, source_id, xi, zi, y_unit, x_unit, z_unit, overwrite=overwrite)
+        client.send_one(yi, ni, source_id, xi, zi, y_unit, x_unit, z_unit,
+                        overwrite=overwrite, x_domain=x_domain, master=master,
+                        master_domain=master_domain)
     except ScryLabError as e:
         raise ScryLabError(str(e)) from None
     except Exception as e:
@@ -54,6 +66,7 @@ def send_many(
     x_unit: Union[str, list, None] = None,
     z_unit: Union[str, list, None] = None,
     overwrite: bool = False,
+    x_domain: Union[str, list, None] = None,
 ) -> None:
     """Send multiple signals to ScryLab without plotting.
 
@@ -66,13 +79,17 @@ def send_many(
     z accepts a 1D array (color axis) or 2D matrix (spectrogram) per signal.
     y_unit, x_unit, z_unit each accept a single string (applied to all signals) or a list
     (one unit per signal).
+    x_domain declares the x quantity ("time", "frequency", …), single string
+    or one per signal – see send(). For parametric XY signals with a master
+    axis use send() per signal.
     Raises ScryLabError on failure.
     """
     try:
         ys, ns, xs, zs = normalize_many(y, names, x, z)
         client    = _default_client
         source_id = client._resolve_source(source)
-        client.send(ys, ns, source_id, xs, zs, y_unit, x_unit, z_unit, overwrite=overwrite)
+        client.send(ys, ns, source_id, xs, zs, y_unit, x_unit, z_unit,
+                    overwrite=overwrite, x_domains=x_domain)
     except ScryLabError as e:
         raise ScryLabError(str(e)) from None
     except Exception as e:
@@ -88,10 +105,14 @@ def plot(
     x_unit: Optional[str] = None,
     z_unit: Optional[str] = None,
     overwrite: bool = False,
+    x_domain: Optional[str] = None,
+    master=None,
+    master_domain: Optional[str] = None,
 ) -> None:
     """Send a single signal to ScryLab and plot a signal-instance.
 
-    Accepts the same y, x, z types as send() (incl. a datetime x for a date axis).
+    Accepts the same y, x, z types and declarations as send()
+    (incl. a datetime x for a date axis and master for parametric XY).
     Always lands in data source "Sent from API".
     A new plot is created if none exists.
     """
@@ -99,7 +120,9 @@ def plot(
         yi, ni, xi, zi = normalize_one(y, name, x, z)
         client    = _default_client
         source_id = client._resolve_source("Sent from API")
-        results   = client.send_one(yi, ni, source_id, xi, zi, y_unit, x_unit, z_unit, overwrite=overwrite)
+        results   = client.send_one(yi, ni, source_id, xi, zi, y_unit, x_unit, z_unit,
+                                    overwrite=overwrite, x_domain=x_domain, master=master,
+                                    master_domain=master_domain)
         for r in results:
             client.plot(r["signal_id"])
     except ScryLabError as e:

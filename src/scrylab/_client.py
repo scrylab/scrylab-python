@@ -82,7 +82,9 @@ class _Client:
 
     def send(self, ys: list, names: list, source_id: str, xs: list, zs: list,
              y_units, x_units, z_units,
-             overwrite: bool = False) -> list[dict]:
+             overwrite: bool = False,
+             x_domains=None, masters=None,
+             master_domains=None) -> list[dict]:
         import numpy as np
 
         n = len(ys)
@@ -93,13 +95,19 @@ class _Client:
             return lst * n if len(lst) == 1 else lst
 
         y_units, x_units, z_units = _norm(y_units), _norm(x_units), _norm(z_units)
+        x_domains, master_domains = _norm(x_domains), _norm(master_domains)
+        masters = list(masters) if masters is not None else [None] * n
         files, metas = [], []
-        for yi, ni, xi, zi, yu, xu, zu in zip(ys, names, xs, zs, y_units, x_units, z_units):
+        for (yi, ni, xi, zi, yu, xu, zu, xd, mi, md) in zip(
+                ys, names, xs, zs, y_units, x_units, z_units,
+                x_domains, masters, master_domains):
             xi, xe = _coerce_x_datetime(xi)
+            mi, me = _coerce_x_datetime(mi)
             buf = io.BytesIO()
             arrays = {"y": np.asarray(yi)}
             if xi is not None: arrays["x"] = np.asarray(xi)
             if zi is not None: arrays["z"] = np.asarray(zi)
+            if mi is not None: arrays["master"] = np.asarray(mi)
             np.savez(buf, **arrays)
             buf.seek(0)
             files.append(("file", (f"{ni}.npz", buf.read(), "application/octet-stream")))
@@ -108,6 +116,9 @@ class _Client:
             if xu is not None: m["x_unit"] = xu
             if zu is not None: m["z_unit"] = zu
             if xe is not None: m["x_epoch"] = xe
+            if xd is not None: m["x_domain"] = xd
+            if me is not None: m["master_epoch"] = me
+            if md is not None: m["master_domain"] = md
             if overwrite: m["overwrite"] = True
             metas.append(m)
 
@@ -120,9 +131,13 @@ class _Client:
         return result.get("signals", [])
 
     def send_one(self, y, name: str, source_id: str, x, z,
-                 y_unit, x_unit, z_unit, overwrite: bool = False) -> list[dict]:
+                 y_unit, x_unit, z_unit, overwrite: bool = False,
+                 x_domain=None, master=None,
+                 master_domain=None) -> list[dict]:
         return self.send([y], [name], source_id, [x], [z],
-                         y_unit, x_unit, z_unit, overwrite=overwrite)
+                         y_unit, x_unit, z_unit, overwrite=overwrite,
+                         x_domains=x_domain, masters=[master],
+                         master_domains=master_domain)
 
     def plot(self, signal_id: str):
         self._post("/api/plot", {"signal_id": signal_id})
